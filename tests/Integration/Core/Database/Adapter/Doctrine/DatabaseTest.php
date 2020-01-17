@@ -8,6 +8,7 @@
 namespace OxidEsales\EshopCommunity\Tests\Integration\Core\Database\Adapter\Doctrine;
 
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\EshopCommunity\Tests\Integration\Internal\ContainerTrait;
 use PDO;
 use Doctrine\DBAL\DBALException;
 use OxidEsales\EshopCommunity\Core\Exception\DatabaseErrorException;
@@ -23,6 +24,8 @@ use OxidEsales\EshopCommunity\Tests\Integration\Core\Database\Adapter\DatabaseIn
  */
 class DatabaseTest extends DatabaseInterfaceImplementationTest
 {
+    use ContainerTrait;
+
     /**
      * @var string The database exception class to be thrown
      */
@@ -260,24 +263,6 @@ class DatabaseTest extends DatabaseInterfaceImplementationTest
     /**
      * Test, that setTransactionIsolationLevel() throws the expected Exception on failure.
      */
-    public function testSetTransactionIsolationLevelThrowsExpectedExceptionOnFailure()
-    {
-        $this->expectException(self::DATABASE_EXCEPTION_CLASS);
-
-        /** @var \OxidEsales\EshopCommunity\Core\Database\Adapter\Doctrine\Database|\PHPUnit\Framework\MockObject\MockObject $databaseMock */
-        $databaseMock = $this->getMockBuilder('\OxidEsales\EshopCommunity\Core\Database\Adapter\Doctrine\Database')
-            ->setMethods(['execute'])
-            ->getMock();
-        $databaseMock->expects($this->once())
-            ->method('execute')
-            ->willThrowException(new DBALException());
-
-        $databaseMock->setTransactionIsolationLevel('READ COMMITTED');
-    }
-
-    /**
-     * Test, that setTransactionIsolationLevel() throws the expected Exception on failure.
-     */
     public function testSetTransactionIsolationLevelThrowsExpectedExceptionOnInvalidParameter()
     {
         $this->expectException('\InvalidArgumentException');
@@ -285,9 +270,6 @@ class DatabaseTest extends DatabaseInterfaceImplementationTest
         $this->database->setTransactionIsolationLevel('INVALID TRANSACTION ISOLATION LEVEL');
     }
 
-    /**
-     * Test, that the methods exception->getCode and exception->getMessage work like errorNo and errorMsg.
-     */
     public function testExceptionGetCodeAndExceptionGetMessageReturnSameResultsAsErrorNoAndErrorMsg()
     {
         $expectedCode = self::EXPECTED_MYSQL_SYNTAX_ERROR_CODE;
@@ -300,6 +282,10 @@ class DatabaseTest extends DatabaseInterfaceImplementationTest
         } catch (\Exception $exception) {
             $actualCode = $exception->getCode();
             $actualMessage = $exception->getMessage();
+        }
+
+        if (strpos($actualMessage, "MariaDB") !== false) {
+            $actualMessage = str_replace("MariaDB", "MySQL", $actualMessage);
         }
 
         $this->assertSame($expectedCode, $actualCode, 'A mysql syntax error should produce an exception with the expected code');

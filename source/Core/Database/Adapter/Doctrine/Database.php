@@ -533,17 +533,7 @@ class Database implements DatabaseInterface
             throw new \InvalidArgumentException();
         }
 
-        try {
-            if (in_array(strtoupper($level), $availableLevels)) {
-                $result = $this->execute('SET SESSION TRANSACTION ISOLATION LEVEL ' . $level);
-            }
-        } catch (DBALException $exception) {
-            $exception = $this->convertException($exception);
-            $this->handleException($exception);
-        } catch (PDOException $exception) {
-            $exception = $this->convertException($exception);
-            $this->handleException($exception);
-        }
+        $result = $this->getConnection()->setTransactionIsolation($this->transactionIsolationLevelMap[$level]);
 
         return $result;
     }

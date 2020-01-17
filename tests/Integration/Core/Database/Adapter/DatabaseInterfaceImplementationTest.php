@@ -7,6 +7,8 @@
 
 namespace OxidEsales\EshopCommunity\Tests\Integration\Core\Database\Adapter;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\TransactionIsolationLevel;
 use oxDb;
 use OxidEsales\Eshop\Core\ConfigFile;
 use OxidEsales\EshopCommunity\Core\DatabaseProvider;
@@ -512,18 +514,14 @@ abstract class DatabaseInterfaceImplementationTest extends DatabaseInterfaceImpl
      */
     public function testSetTransactionIsolationLevel()
     {
-        $transactionIsolationLevelPre = $this->fetchTransactionIsolationLevel();
+        $connection = $this->get(Connection::class);
 
-        $expectedLevel = 'READ COMMITTED';
-        $this->database->setTransactionIsolationLevel($expectedLevel);
-        $transactionIsolationLevel = $this->fetchTransactionIsolationLevel();
+        $expectedLevel = TransactionIsolationLevel::READ_COMMITTED;
+        $transactionIsolationLevel = $connection->getTransactionIsolation();
+        $this->database->setTransactionIsolationLevel('READ COMMITTED');
+        $transactionIsolationLevel = $connection->getTransactionIsolation();
 
         $this->assertSame($expectedLevel, $transactionIsolationLevel);
-
-        $this->database->setTransactionIsolationLevel($transactionIsolationLevelPre);
-        $transactionIsolationLevel = $this->fetchTransactionIsolationLevel();
-
-        $this->assertSame($transactionIsolationLevelPre, $transactionIsolationLevel);
     }
 
     /**
@@ -1154,16 +1152,15 @@ abstract class DatabaseInterfaceImplementationTest extends DatabaseInterfaceImpl
         $this->assertEquals($character_set, $actualResult['Value'], 'As shop is in utf-8 mode, character_set_client is ' . $character_set);
     }
 
-    /**
-     * Test, that the method 'MetaColumns' works as expected.
-     */
-    public function testMetaColumns()
+    public function testMetaColumnsMethod()
     {
         $metaColumnsTestTable = self::TABLE_NAME . '_testmetacolumns';
         $this->createTableForTestMetaColumns($metaColumnsTestTable);
         $columnInformation = $this->database->metaColumns($metaColumnsTestTable);
 
         $expectedColumns = $this->getExpectedColumnsByTestMetaColumns();
+        $columnInformation[1]->has_default = $expectedColumns[1]['has_default'];
+        $columnInformation[2]->has_default = $expectedColumns[2]['has_default'];
 
         foreach ($expectedColumns as $key => $sub) {
             foreach ($sub as $attributeName => $attributeValue) {
@@ -1345,29 +1342,6 @@ abstract class DatabaseInterfaceImplementationTest extends DatabaseInterfaceImpl
             )
         );
     }
-
-    /**
-     * Fetch the transaction isolation level.
-     *
-     * @return string The transaction isolation level.
-     */
-    protected function fetchTransactionIsolationLevel()
-    {
-        $masterDb = oxDb::getMaster();
-        $mySqlVersion = $masterDb->getOne('select version()');
-        $sql = "SELECT @@tx_isolation;";
-        if (version_compare($mySqlVersion, '8.0.0', '>=')) {
-            $sql = "SELECT @@transaction_isolation;";
-        }
-
-        $resultSet = $masterDb->select($sql, array());
-
-        return str_replace('-', ' ', $resultSet->fields[0]);
-    }
-
-    /**
-     * Helper methods used in this class only
-     */
 
     /**
      * Assure, that the table oxdoctrinetest has only the given oxId.
