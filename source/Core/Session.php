@@ -215,7 +215,7 @@ class Session extends \OxidEsales\Eshop\Core\Base
      */
     public function start()
     {
-        if ($this->_allowSessionStart()) {
+        if ($this->isSessionStarted() === false && $this->_allowSessionStart()) {
             
             $this->setName($this->isAdmin() ? 'admin_sid' : 'sid');
 
@@ -816,10 +816,6 @@ class Session extends \OxidEsales\Eshop\Core\Base
      */
     protected function _allowSessionStart()
     {
-        if ($this->isSessionStarted()) {
-            return false;
-        }
-
         $blAllowSessionStart = true;
         $myConfig = $this->getConfig();
 
