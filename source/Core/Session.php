@@ -215,11 +215,11 @@ class Session extends \OxidEsales\Eshop\Core\Base
      */
     public function start()
     {
-        if ($this->isSessionStarted() === false && $this->_allowSessionStart()) {
-            
-            $this->setName($this->isAdmin() ? 'admin_sid' : 'sid');
+        $this->setName($this->isAdmin() ? 'admin_sid' : 'sid');
+        $sid = $this->getSidFromRequest();
+        $this->setId($sid);
 
-            $sid = $this->getSidFromRequest();
+        if ($this->isSessionStarted() === false && $this->_allowSessionStart()) {
             if (!$sid) {
                 self::$_blIsNewSession = true;
                 $this->initNewSession();
