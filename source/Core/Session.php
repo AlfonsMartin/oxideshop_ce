@@ -351,7 +351,9 @@ class Session extends \OxidEsales\Eshop\Core\Base
             }
         }
 
-        $this->setId($this->_getNewSessionId());
+        $sessionId = $this->_getNewSessionId(false);
+        $this->setId($sessionId);
+        $this->setSessionCookie($sessionId);
 
         //restoring persistent params to session
         foreach ($aPersistent as $sKey => $sParam) {
@@ -376,7 +378,10 @@ class Session extends \OxidEsales\Eshop\Core\Base
             $this->setVariable("sessionagent", \OxidEsales\Eshop\Core\Registry::getUtilsServer()->getServerVar('HTTP_USER_AGENT'));
         }
 
-        $this->setId($this->_getNewSessionId(false));
+        $sessionId = $this->_getNewSessionId(false);
+        $this->setId($sessionId);
+        $this->setSessionCookie($sessionId);
+
         $this->_initNewSessionChallenge();
     }
 
@@ -964,21 +969,7 @@ class Session extends \OxidEsales\Eshop\Core\Base
         session_id($sSessId);
 
         $this->setId($sSessId);
-
-        $blUseCookies = $this->_getSessionUseCookies();
-
-        if (!$this->_allowSessionStart()) {
-            if ($blUseCookies) {
-                \OxidEsales\Eshop\Core\Registry::getUtilsServer()->setOxCookie($this->getName(), null);
-            }
-
-            return;
-        }
-
-        if ($blUseCookies) {
-            //setting session cookie
-            \OxidEsales\Eshop\Core\Registry::getUtilsServer()->setOxCookie($this->getName(), $sSessId);
-        }
+        $this->setSessionCookie($sSessId);
     }
 
     /**
@@ -1134,5 +1125,16 @@ class Session extends \OxidEsales\Eshop\Core\Base
      */
     protected function sidToUrlEvent()
     {
+    }
+
+    private function setSessionCookie($sessionId): void
+    {
+        if($this->_getSessionUseCookies()) {
+            if (!$this->_allowSessionStart()) {
+                Registry::getUtilsServer()->setOxCookie($this->getName(), null);
+            } else {
+                Registry::getUtilsServer()->setOxCookie($this->getName(), $sessionId);
+            }
+        }
     }
 }
