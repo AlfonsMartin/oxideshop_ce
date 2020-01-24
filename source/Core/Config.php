@@ -2207,9 +2207,9 @@ class Config extends \OxidEsales\Eshop\Core\Base
     public function getShopUrlByLanguage($lang, $ssl = false)
     {
         $configParameter = $ssl ? 'aLanguageSSLURLs' : 'aLanguageURLs';
-        $lang = isset($lang) ? $lang : Registry::getLang()->getBaseLanguage();
+        $lang = $lang ?? Registry::getLang()->getBaseLanguage();
         $languageURLs = $this->getConfigParam($configParameter);
-        if (isset($lang) && isset($languageURLs[$lang]) && !empty($languageURLs[$lang])) {
+        if (isset($languageURLs[$lang]) && !empty($languageURLs[$lang])) {
             $languageURLs[$lang] = Registry::getUtils()->checkUrlEndingSlash($languageURLs[$lang]);
             return $languageURLs[$lang];
         }
