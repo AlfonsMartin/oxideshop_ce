@@ -30,6 +30,16 @@ class Field // extends \OxidEsales\Eshop\Core\Base
     const T_RAW = 2;
 
     /**
+     * Value no escaping wanted or needed
+     */
+    protected $value;
+
+    /**
+     * Raw value will be escaped if someone wants value and value isn't set
+     */
+    protected $rawValue;
+
+    /**
      * Constructor
      * Initial value assigment is coded here by not calling a function is for performance
      * because oxField is created MANY times and even a function call matters

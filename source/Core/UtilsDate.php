@@ -134,6 +134,10 @@ class UtilsDate extends \OxidEsales\Eshop\Core\Base
         $blTimeFound = false;
         $aDateMatches = [];
         $aTimeMatches = [];
+        $aDFields = [];
+        $aTFields = [];
+        $sDateFormat = '';
+        $sTimeFormat = '';
 
         // looking for date field
         foreach ($aDatePatterns as $sPattern => $sType) {
@@ -287,6 +291,7 @@ class UtilsDate extends \OxidEsales\Eshop\Core\Base
         $aDFormats = $this->_defineDateFormattingRules();
         $aTFormats = $this->_defineTimeFormattingRules();
         $oStr = getStr();
+        $blDefTimeFound = false;
 
         foreach (array_keys($aDefTimePatterns) as $sDefTimePattern) {
             if ($oStr->preg_match($sDefTimePattern, $sDate)) {
@@ -653,7 +658,7 @@ class UtilsDate extends \OxidEsales\Eshop\Core\Base
     {
         $aDate = explode(".", $sDate);
 
-        if (isset($aDate) && count($aDate) > 1) {
+        if ($aDate && count($aDate) > 1) {
             if (count($aDate) == 2) {
                 $sDate = $aDate[1] . "-" . $aDate[0];
             } else {

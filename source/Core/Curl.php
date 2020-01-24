@@ -198,7 +198,7 @@ class Curl
             $header = [];
             $header[] = 'POST /cgi-bin/webscr HTTP/1.1';
             $header[] = 'Content-Type: application/x-www-form-urlencoded';
-            if (isset($host)) {
+            if (!is_null($host)) {
                 $header[] = 'Host: ' . $host;
             }
             $header[] = 'Connection: close';

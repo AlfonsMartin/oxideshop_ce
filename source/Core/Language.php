@@ -328,7 +328,7 @@ class Language extends \OxidEsales\Eshop\Core\Base
                         $oLang->sort = $aLangParams[$key]['sort'];
                     }
 
-                    $oLang->selected = (isset($iLanguage) && $oLang->id == $iLanguage) ? 1 : 0;
+                    $oLang->selected = $oLang->id == $iLanguage ? 1 : 0;
                     $aLanguages[$oLang->id] = $oLang;
                 }
                 ++$i;
