@@ -58,14 +58,9 @@ class Field // extends \OxidEsales\Eshop\Core\Base
     {
         // duplicate content here is needed for performance.
         // as this function is called *many* (a lot) times, it is crucial to be fast here!
-        switch ($type) {
-            case self::T_TEXT:
-            default:
-                $this->rawValue = $value;
-                break;
-            case self::T_RAW:
-                $this->value = $value;
-                break;
+        $this->rawValue = $value;
+        if ($type == self::T_RAW) {
+            $this->value = $value;
         }
     }
 
