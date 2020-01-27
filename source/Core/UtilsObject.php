@@ -72,7 +72,7 @@ class UtilsObject
      * @param ModuleChainsGenerator                $moduleChainsGenerator
      * @param ShopIdCalculator                     $shopIdCalculator
      */
-    public function __construct($classNameProvider = null, $moduleChainsGenerator = null, $shopIdCalculator = null)
+    public final function __construct($classNameProvider = null, $moduleChainsGenerator = null, $shopIdCalculator = null)
     {
         $this->classNameProvider = $classNameProvider;
         $this->shopIdCalculator = $shopIdCalculator;
