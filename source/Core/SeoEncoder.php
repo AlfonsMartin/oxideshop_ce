@@ -65,6 +65,13 @@ class SeoEncoder extends \OxidEsales\Eshop\Core\Base
     protected static $_aFixedCache = [];
 
     /**
+     * Static url cache
+     *
+     * @return array
+     */
+    protected static $_aStaticUrlCache = [];
+    
+    /**
      * SEO Cache key for active view
      *
      * @var string

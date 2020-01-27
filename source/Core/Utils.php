@@ -60,6 +60,13 @@ class Utils extends \OxidEsales\Eshop\Core\Base
     protected $_aFileCacheContents = [];
 
     /**
+     * Meta cache
+     * 
+     * @var array
+     */
+    protected $_aFileCacheMeta = [];
+
+    /**
      * Search engine indicator
      *
      * @var bool
@@ -80,6 +87,11 @@ class Utils extends \OxidEsales\Eshop\Core\Base
      */
     protected $_blSeoIsActive = null;
 
+    /**
+     * Article user
+     */
+    protected $_oUser = null;
+    
     /**
      * Returns string witch "." symbols were replaced with "__".
      *
@@ -1003,7 +1015,7 @@ class Utils extends \OxidEsales\Eshop\Core\Base
      */
     public function isValidAlpha($sField)
     {
-        return (bool) getStr()->preg_match('/^[a-zA-Z0-9_]*$/', $sField);
+        return (bool) \getStr()->preg_match('/^[a-zA-Z0-9_]*$/', $sField);
     }
 
     /**
@@ -1142,7 +1154,7 @@ class Utils extends \OxidEsales\Eshop\Core\Base
      */
     protected function _addUrlParameters($sUrl, $aParams)
     {
-        $sDelimiter = ((getStr()->strpos($sUrl, '?') !== false)) ? '&' : '?';
+        $sDelimiter = ((\getStr()->strpos($sUrl, '?') !== false)) ? '&' : '?';
         foreach ($aParams as $sName => $sVal) {
             $sUrl = $sUrl . $sDelimiter . $sName . '=' . $sVal;
             $sDelimiter = '&';
@@ -1167,13 +1179,14 @@ class Utils extends \OxidEsales\Eshop\Core\Base
         $myConfig = $this->getConfig();
         $oObject = new stdClass();
         $aPrice = explode('!P!', $aName[0]);
+        $oCur = null;
 
         if (($myConfig->getConfigParam('bl_perfLoadSelectLists') && $myConfig->getConfigParam('bl_perfUseSelectlistPrice') && isset($aPrice[0]) && isset($aPrice[1])) || $this->isAdmin()) {
             // yes, price is there
             $oObject->price = isset($aPrice[1]) ? $aPrice[1] : 0;
             $aName[0] = isset($aPrice[0]) ? $aPrice[0] : '';
 
-            $iPercPos = getStr()->strpos($oObject->price, '%');
+            $iPercPos = \getStr()->strpos($oObject->price, '%');
             if ($iPercPos !== false) {
                 $oObject->priceUnit = '%';
                 $oObject->fprice = $oObject->price;
@@ -1208,7 +1221,7 @@ class Utils extends \OxidEsales\Eshop\Core\Base
             }
         } elseif (isset($aPrice[0]) && isset($aPrice[1])) {
             // A. removing unused part of information
-            $aName[0] = getStr()->preg_replace("/!P!.*/", "", $aName[0]);
+            $aName[0] = \getStr()->preg_replace("/!P!.*/", "", $aName[0]);
         }
 
         $oObject->name = $aName[0];
@@ -1282,6 +1295,7 @@ class Utils extends \OxidEsales\Eshop\Core\Base
     {
         $sFileName = strtolower($sFileName);
         $iLastDot = strrpos($sFileName, '.');
+        $sType = '';
 
         if ($iLastDot !== false) {
             $sType = substr($sFileName, $iLastDot + 1);
@@ -1423,7 +1437,7 @@ class Utils extends \OxidEsales\Eshop\Core\Base
      */
     public function checkUrlEndingSlash($sUrl)
     {
-        if (!getStr()->preg_match("/\/$/", $sUrl)) {
+        if (!\getStr()->preg_match("/\/$/", $sUrl)) {
             $sUrl .= '/';
         }
 
@@ -1479,7 +1493,7 @@ class Utils extends \OxidEsales\Eshop\Core\Base
      */
     public function extractDomain($sHost)
     {
-        $oStr = getStr();
+        $oStr = \getStr();
         if (
             !$oStr->preg_match('/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/', $sHost) &&
             ($iLastDot = strrpos($sHost, '.')) !== false
