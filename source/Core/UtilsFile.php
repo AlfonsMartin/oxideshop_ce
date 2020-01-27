@@ -154,7 +154,7 @@ class UtilsFile extends \OxidEsales\Eshop\Core\Base
      */
     public function normalizeDir($sDir)
     {
-        if (isset($sDir) && $sDir != "" && substr($sDir, -1) !== '/') {
+        if (is_string($sDir) && substr($sDir, -1) !== '/') {
             $sDir .= "/";
         }
 
@@ -169,7 +169,7 @@ class UtilsFile extends \OxidEsales\Eshop\Core\Base
      */
     public function copyDir($sSourceDir, $sTargetDir)
     {
-        $oStr = getStr();
+        $oStr = \getStr();
         $handle = opendir($sSourceDir);
         while (false !== ($file = readdir($handle))) {
             if ($file != '.' && $file != '..') {
@@ -267,10 +267,10 @@ class UtilsFile extends \OxidEsales\Eshop\Core\Base
             // add type to name
             $aFilename = explode(".", $sValue);
 
-            $sFileType = trim($aFilename[count($aFilename) - 1]);
+            if ($aFilename !== false) {
+                $sFileType = trim($aFilename[count($aFilename) - 1]);
 
-            if (isset($sFileType)) {
-                $oStr = getStr();
+                $oStr = \getStr();
 
                 // unallowed files ?
                 if (in_array($sFileType, $this->_aBadFiles) || ($blDemo && !in_array($sFileType, $this->_aAllowedFiles))) {
@@ -531,7 +531,7 @@ class UtilsFile extends \OxidEsales\Eshop\Core\Base
         }
 
         //wrong chars in file name?
-        if (!getStr()->preg_match('/^[\-_a-z0-9\.]+$/i', $aFileInfo['name'])) {
+        if (!Str::getStr()->preg_match('/^[\-_a-z0-9\.]+$/i', $aFileInfo['name'])) {
             throw oxNew(\OxidEsales\Eshop\Core\Exception\StandardException::class, 'EXCEPTION_FILENAMEINVALIDCHARS');
         }
 
@@ -578,7 +578,7 @@ class UtilsFile extends \OxidEsales\Eshop\Core\Base
         $sFilePath = $this->normalizeDir($sFilePath);
         $iFileCounter = 0;
         $sTempFileName = $sFileName;
-        $oStr = getStr();
+        $oStr = \getStr();
 
         //file exists ?
         while ($blUnique && file_exists($sFilePath . "/" . $sFileName . $sSufix . "." . $sFileExt)) {
