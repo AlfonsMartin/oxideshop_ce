@@ -7,6 +7,8 @@
 
 namespace OxidEsales\EshopCommunity\Core;
 
+use OxidEsales\Eshop\Core\Str;
+
 /**
  * Database field description object.
  *
@@ -28,16 +30,6 @@ class Field // extends \OxidEsales\Eshop\Core\Base
      * escaping functionality type: expected value is not escaped (raw) text.
      */
     const T_RAW = 2;
-
-    /**
-     * Value no escaping wanted or needed
-     */
-    protected $value;
-
-    /**
-     * Raw value will be escaped if someone wants value and value isn't set
-     */
-    protected $rawValue;
 
     /**
      * Constructor
@@ -83,16 +75,7 @@ class Field // extends \OxidEsales\Eshop\Core\Base
      */
     public function __isset($name)
     {
-        switch ($name) {
-            case 'rawValue':
-                return ($this->rawValue !== null);
-                break;
-            case 'value':
-                return ($this->value !== null);
-                break;
-            //return true;
-        }
-        return false;
+        return ($this->{$name} !== null);
     }
 
     /**
@@ -110,7 +93,7 @@ class Field // extends \OxidEsales\Eshop\Core\Base
                 break;
             case 'value':
                 if (is_string($this->rawValue)) {
-                    $this->value = getStr()->htmlspecialchars($this->rawValue);
+                    $this->value = Str::getStr()->htmlspecialchars($this->rawValue);
                 } else {
                     // TODO: call htmlentities for each value (recursively?)
                     $this->value = $this->rawValue;
@@ -161,13 +144,10 @@ class Field // extends \OxidEsales\Eshop\Core\Base
      */
     protected function _initValue($value = null, $type = self::T_TEXT)
     {
-        switch ($type) {
-            case self::T_TEXT:
-                $this->rawValue = $value;
-                break;
-            case self::T_RAW:
-                $this->value = $value;
-                break;
+        if ($type == self::T_TEXT) {
+            $this->rawValue = $value;
+        } else {
+            $this->value = $value;
         }
     }
 
