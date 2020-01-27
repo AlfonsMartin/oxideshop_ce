@@ -228,7 +228,7 @@ class UtilsServer extends \OxidEsales\Eshop\Core\Base
             $sValue = \OxidEsales\Eshop\Core\Registry::getConfig()->checkParamSpecialChars($_COOKIE[$sName]);
         } elseif ($sName && !isset($_COOKIE[$sName])) {
             $sValue = isset($this->_sSessionCookies[$sName]) ? $this->_sSessionCookies[$sName] : null;
-        } elseif (!$sName && isset($_COOKIE)) {
+        } elseif (!$sName) {
             $sValue = $_COOKIE;
         }
 
@@ -264,12 +264,10 @@ class UtilsServer extends \OxidEsales\Eshop\Core\Base
     public function getServerVar($sServVar = null)
     {
         $sValue = null;
-        if (isset($_SERVER)) {
-            if ($sServVar && isset($_SERVER[$sServVar])) {
-                $sValue = $_SERVER[$sServVar];
-            } elseif (!$sServVar) {
-                $sValue = $_SERVER;
-            }
+        if ($sServVar && isset($_SERVER[$sServVar])) {
+            $sValue = $_SERVER[$sServVar];
+        } elseif (!$sServVar) {
+            $sValue = $_SERVER;
         }
 
         return $sValue;

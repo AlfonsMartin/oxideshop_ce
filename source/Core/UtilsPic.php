@@ -184,13 +184,12 @@ class UtilsPic extends \OxidEsales\Eshop\Core\Base
      * @param int    $iOriginalWidth  original width
      * @param int    $iOriginalHeigth original height
      * @param int    $iGDVer          GD packet version @deprecated
-     * @param bool   $blDisableTouch  false if "touch()" should be called
      *
      * @return bool
      */
-    protected function _resizeGif($sSrc, $sTarget, $iNewWidth, $iNewHeight, $iOriginalWidth, $iOriginalHeigth, $iGDVer, $blDisableTouch)
+    protected function _resizeGif($sSrc, $sTarget, $iNewWidth, $iNewHeight, $iOriginalWidth, $iOriginalHeigth, $iGDVer)
     {
-        return resizeGif($sSrc, $sTarget, $iNewWidth, $iNewHeight, $iOriginalWidth, $iOriginalHeigth, $iGDVer, $blDisableTouch);
+        return resizeGif($sSrc, $sTarget, $iNewWidth, $iNewHeight, $iOriginalWidth, $iOriginalHeigth, $iGDVer);
     }
 
     /**

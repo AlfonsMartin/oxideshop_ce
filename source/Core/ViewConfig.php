@@ -68,6 +68,12 @@ class ViewConfig extends \OxidEsales\Eshop\Core\Base
     protected $_sShopLogo = null;
 
     /**
+     * Time left in basket
+     * @var int
+     */
+    protected $_dBasketTimeLeft = null;
+
+    /**
      * Returns shops home link
      *
      * @return string

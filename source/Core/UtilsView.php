@@ -273,6 +273,8 @@ class UtilsView extends \OxidEsales\Eshop\Core\Base
             $oActView->addGlobalParams();
         }
 
+        $result = '';
+
         if (is_array($sDesc)) {
             foreach ($sDesc as $name => $aData) {
                 $result[$name] = $this->getRenderedContent($aData[1], $oActView->getViewData(), $sOxid);
