@@ -30,7 +30,7 @@ class ModuleAutoload
      *
      * Make constructor protected to ensure Singleton pattern
      */
-    protected function __construct()
+    protected final function __construct()
     {
     }
 

@@ -40,6 +40,19 @@ class BaseModel extends \OxidEsales\Eshop\Core\Base
     protected $_sOXID = null;
 
     /**
+     * @var string
+     */
+    protected $oxobject2category__oxobjectid;
+     /**
+     * @var string
+     */
+    protected $oxobject2category__oxcatnid;
+     /**
+     * @var string
+     */
+    protected $oxobject2category__oxshopid;
+
+    /**
      * ID of running shop session (default null).
      *
      * @var int
@@ -183,7 +196,7 @@ class BaseModel extends \OxidEsales\Eshop\Core\Base
      * @var bool
      */
     protected $_blEmployMultilanguage = false;
-
+    
     /**
      * Getting use skip fields or not
      *

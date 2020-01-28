@@ -27,6 +27,11 @@ class ModuleInstaller extends \OxidEsales\Eshop\Core\Base
     protected $_oModuleCache;
 
     /**
+     * @var \OxidEsales\Eshop\Core\Module\ModuleExtensionsCleaner
+     */
+    protected $moduleCleaner;
+
+    /**
      * Sets dependencies.
      *
      * @param \OxidEsales\Eshop\Core\Module\ModuleCache             $moduleCache
@@ -35,6 +40,7 @@ class ModuleInstaller extends \OxidEsales\Eshop\Core\Base
     public function __construct(\OxidEsales\Eshop\Core\Module\ModuleCache $moduleCache = null, $moduleCleaner = null)
     {
         $this->setModuleCache($moduleCache);
+        $this->moduleCleaner = $moduleCleaner;
     }
 
     /**

@@ -374,7 +374,7 @@ class Database implements DatabaseInterface
      *
      * @param string $string The string to be quoted.
      *
-     * @return string
+     * @return false|string
      */
     public function quoteIdentifier($string)
     {
@@ -383,7 +383,7 @@ class Database implements DatabaseInterface
         if (!$identifierQuoteCharacter) {
             $identifierQuoteCharacter = '`';
         }
-
+        $result = false;
         $string = trim(str_replace($identifierQuoteCharacter, '', $string));
         try {
             $result = $this->getConnection()->quoteIdentifier($string);
@@ -421,6 +421,7 @@ class Database implements DatabaseInterface
      */
     public function quote($value)
     {
+        $result = false;
         try {
             $result = $this->getConnection()->quote($value);
         } catch (DBALException $exception) {
@@ -1034,6 +1035,7 @@ class Database implements DatabaseInterface
      */
     public function getLastInsertId()
     {
+        $lastInsertId = -1;
         try {
             $lastInsertId = $this->getConnection()->lastInsertId();
         } catch (DBALException $exception) {
@@ -1075,7 +1077,8 @@ class Database implements DatabaseInterface
               TABLE_SCHEMA = '$databaseName'
               AND
               TABLE_NAME = '$table'";
-
+              
+        $columns = [];
         try {
             $columns = $connection->executeQuery($query)->fetchAll();
         } catch (DBALException $exception) {
@@ -1171,6 +1174,7 @@ class Database implements DatabaseInterface
      */
     public function isRollbackOnly()
     {
+        $isRollbackOnly = false;
         try {
             $isRollbackOnly = $this->connection->isRollbackOnly();
         } catch (DBALException $exception) {
@@ -1191,6 +1195,7 @@ class Database implements DatabaseInterface
      */
     public function isTransactionActive()
     {
+        $isTransactionActive = false;
         try {
             $isTransactionActive = $this->connection->isTransactionActive();
         } catch (DBALException $exception) {

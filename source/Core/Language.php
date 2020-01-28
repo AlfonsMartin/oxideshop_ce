@@ -1073,9 +1073,6 @@ class Language extends \OxidEsales\Eshop\Core\Base
         $iLang = ($iLang === null && $blAdmin) ? $this->getTplLanguage() : $iLang;
         if (!isset($iLang)) {
             $iLang = $this->getBaseLanguage();
-            if (!isset($iLang)) {
-                $iLang = 0;
-            }
         }
 
         return (int) $iLang;

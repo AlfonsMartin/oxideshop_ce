@@ -169,7 +169,7 @@ class GenericImport
 
         $file = @fopen($this->importFilePath, 'r');
 
-        if (isset($file) && $file) {
+        if ($file) {
             $data = [];
             while (($row = fgetcsv($file, $this->maxLineLength, $this->getCsvFieldsTerminator(), $this->getCsvFieldsEncolser())) !== false) {
                 $data[] = $this->csvTextConvert($row, false);

@@ -56,7 +56,7 @@ class DatabaseProvider
      *
      * Database constructor.
      */
-    public function __construct()
+    public final function __construct()
     {
     }
 

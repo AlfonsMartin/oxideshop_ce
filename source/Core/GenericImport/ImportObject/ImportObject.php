@@ -340,7 +340,7 @@ abstract class ImportObject
      */
     protected function checkIdField($id)
     {
-        if (!isset($id) || !$id) {
+        if (empty($id)) {
             throw new Exception("ERROR: Articlenumber/ID missing!");
         } elseif (strlen($id) > 32) {
             throw new Exception("ERROR: Articlenumber/ID longer then allowed (32 chars max.)!");
